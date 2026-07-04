@@ -225,7 +225,3 @@ If you find this work useful, please cite:
 ```
 
 Paper: <https://arxiv.org/pdf/2607.02252>
-
-## License
-
-This project is released under the MIT License.
