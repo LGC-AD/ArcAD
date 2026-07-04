@@ -209,7 +209,7 @@ ArcAD/
 
 ## 🙏 Acknowledgements
 
-This implementation is built upon [Dinomaly](https://github.com/guojiajeremy/dinomaly) (CVPR 2025), whose minimal reconstruction framework and DINOv2 integration we reuse. We thank the Dinomaly authors. We also thank the maintainers of MVTec-AD, VisA, Real-IAD, and MANTA.
+This implementation is built upon [Dinomaly](https://github.com/guojiajeremy/dinomaly). We also thank the authors of [RD4AD](https://github.com/hq-deng/RD4AD) and [ReContrast](https://github.com/guojiajeremy/ReContrast) for their excellent work, as well as the maintainers of MVTec-AD, VisA, Real-IAD, and MANTA.
 
 ## 📜 Citation
 
