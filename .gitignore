@@ -1,0 +1,29 @@
+# --- Generated prototypes (regenerate with gen_protos.py) ---
+*_init_files*/
+*_init_files*/
+
+# --- Pretrained backbone weights (download separately, see README) ---
+backbones/weights/
+
+# --- Experiment outputs (checkpoints, logs, metrics) ---
+saved_results/
+logs/
+result/
+
+# --- Released split JSONs (hosted on Hugging Face, see README) ---
+splits/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# --- Local tooling ---
+.claude/
