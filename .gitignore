@@ -12,6 +12,8 @@ result/
 
 # --- Released split JSONs (hosted on Hugging Face, see README) ---
 splits/
+_old_*_CD/
+ArcAD_Cold-start_Data_Splits.zip
 
 # --- Python ---
 __pycache__/

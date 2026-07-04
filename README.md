@@ -3,14 +3,17 @@
 # ArcAD: Anomaly-Rectified Calibration for Cold-Start Supervised Anomaly Detection
 
 [![arXiv](https://img.shields.io/badge/arXiv-2607.02252-b31b1b.svg)](https://arxiv.org/pdf/2607.02252)
+[![ECCV](https://img.shields.io/badge/ECCV-2026-9cf.svg)](https://eccv.ecva/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
 **A plug-and-play calibration framework for reconstruction-based Industrial Anomaly Detection under cold-start conditions.**
 
+🎉 **Accepted to ECCV 2026.**
 </div>
 
 ## 🔔 News
 - **2026-07**: Code and **data-split JSONs** for MVTec-AD / VisA / Real-IAD / MANTA are released.
+- ArcAD is accepted to **ECCV 2026**.
 
 ## 📖 Introduction
 
@@ -57,9 +60,9 @@ backbones/weights/dinov2_vitb14_reg4_pretrain.pth
 
 ArcAD adopts a **cold-start supervised** split: a small `labeled` set (few normals + few anomalies, with masks) for training, and a `test` set for evaluation. The exact splits we used are released as open JSON files on 🤗 Hugging Face:
 
-> **Dataset splits:** `<!-- TODO: paste your Hugging Face dataset URL here -->`
+> **Dataset splits:** <https://huggingface.co/datasets/nnh1012/ArcAD_Cold-start_Data_Splits>
 
-Each split JSON is a *manifest* — a list of which images (and their masks) belong to the `labeled` / `test` sets, with paths relative to the dataset root. It does **not** contain the images themselves. To use it, download the original datasets (MVTec-AD, VisA, Real-IAD, MANTA) and arrange them under one root so that the relative paths in the JSON resolve. The released data is organized into cold-start folders named with a `_CD` suffix (`mvtec_CD`, `VisA_CD`, `Real-IAD_CD`, `MANTA_CD`).
+Each split JSON is a *manifest* — a list of which images (and their masks) belong to the `labeled` / `test` sets. **All paths are written against the original download structure of each dataset** — just download the official datasets, set `--data_path` to the root, and the relative paths resolve directly, with no reorganization needed. The manifests do **not** contain the images themselves.
 
 ### Split JSON format
 
@@ -68,63 +71,48 @@ Every `<category>.json` has the same schema:
 ```json
 {
   "meta":   { "dataset": "mvtec", "category": "bottle", "num_labeled": 69, "num_test": 223 },
-  "labeled":[ { "image": "bottle/train/label/good/084.png",  "mask": "",  "label": 0, "anomaly_class": "good" },
-              { "image": "bottle/train/label/bad/005.png",   "mask": "bottle/train/label/ground_truth/005_mask.png", "label": 1, "anomaly_class": "defect" } ],
+  "labeled":[ { "image": "bottle/train/good/000.png",            "mask": "",                                              "label": 0, "anomaly_class": "good" },
+              { "image": "bottle/test/broken_large/005.png",     "mask": "bottle/ground_truth/broken_large/005_mask.png", "label": 1, "anomaly_class": "broken_large" } ],
   "test":   [ ... ]
 }
 ```
 
-- All paths are **relative to the dataset root** (the `--data_path` argument).
+- All paths are **relative to the dataset root** (the `--data_path` argument) and use each dataset's **original download layout**.
 - `mask` is `""` for normal samples (no mask file).
 - `label`: `0` = normal, `1` = anomaly.
+- `anomaly_class`: `"good"` for normals; the defect sub-folder name (e.g. `broken_large`) for MVTec, `"anomaly"` for VisA / Real-IAD / MANTA.
 
 The total number of labeled samples matches the cold-start protocol (e.g. MVTec-AD: 1089 normals + 121 anomalies; Real-IAD: 10940 normals + 1216 anomalies).
 
-### Regenerating the splits
-
-If you have organized the raw datasets locally, you can regenerate the split JSONs with [`prepare_data/gen_splits.py`](./prepare_data/gen_splits.py). It enumerates the same `Dataset` classes the training scripts use, so the output is byte-for-byte consistent with the released splits:
-
-```bash
-python prepare_data/gen_splits.py --dataset mvtec   --mvtec_root   /path/to/mvtec_CD
-python prepare_data/gen_splits.py --dataset visa    --visa_root    /path/to/VisA_CD
-python prepare_data/gen_splits.py --dataset realiad --realiad_root /path/to/Real-IAD_CD
-python prepare_data/gen_splits.py --dataset manta   --manta_root   /path/to/MANTA_CD
-```
-
 ### Expected on-disk layout
 
-After obtaining each dataset, arrange it so that the relative paths in the JSON resolve under `--data_path`. Concretely:
+The JSON paths resolve against the **official download structure** of each dataset. Point `--data_path` at the root shown below:
 
 <details>
-<summary><b>MVTec-AD</b> (mvtec_CD)</summary>
+<summary><b>MVTec-AD</b></summary>
 
 ```
 <data_path>/bottle/
-    train/label/good/*.png
-    train/label/bad/*.png
-    train/label/ground_truth/<name>_mask.png
+    train/good/*.png
     test/good/*.png
-    test/<defect_type>/*.png            # e.g. broken_large, contamination, ...
+    test/<defect_type>/*.png            # e.g. broken_large, broken_small, contamination, ...
     ground_truth/<defect_type>/<name>_mask.png
 ```
 </details>
 
 <details>
-<summary><b>VisA</b> (VisA_CD)</summary>
+<summary><b>VisA</b></summary>
 
 ```
 <data_path>/candle/
-    train/good/*.JPG
-    train/bad/*.JPG
-    train/ground_truth/bad/<name>.png
-    test/good/*.JPG
-    test/bad/*.JPG
-    ground_truth/bad/<name>.png
+    Data/Images/Normal/*.JPG
+    Data/Images/Anomaly/*.JPG
+    Data/Masks/Anomaly/*.png
 ```
 </details>
 
 <details>
-<summary><b>Real-IAD</b> (Real-IAD_CD)</summary>
+<summary><b>Real-IAD</b></summary>
 
 ```
 <data_path>/realiad_1024/<category>/<image>      # image_path from realiad_jsons/sup/<cat>.json
@@ -133,7 +121,7 @@ After obtaining each dataset, arrange it so that the relative paths in the JSON 
 </details>
 
 <details>
-<summary><b>MANTA</b> (MANTA_CD)</summary>
+<summary><b>MANTA</b></summary>
 
 ```
 <data_path>/MANTA_TINY_256_cropped/<category>/<image>
@@ -198,7 +186,6 @@ ArcAD/
 ├── arcad_{mvtec,visa,manta,realiad}_uni.py   # per-dataset train+eval entry points
 ├── gen_protos.py                              # unified prototype generator (--dataset)
 ├── dataset.py                                 # dataset classes (cold-start splits)
-├── prepare_data/gen_splits.py                 # export split JSONs (regenerate locally)
 ├── models/                                    # ViTill reconstruction backbone, SPM, DGC
 ├── backbones/                                 # frozen DINOv2 encoder loader
 ├── optimizers/                                # StableAdamW, cosine scheduler
