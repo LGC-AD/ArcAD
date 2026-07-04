@@ -3,8 +3,6 @@
 # ArcAD: Anomaly-Rectified Calibration for Cold-Start Supervised Anomaly Detection
 
 [![arXiv](https://img.shields.io/badge/arXiv-2607.02252-b31b1b.svg)](https://arxiv.org/pdf/2607.02252)
-[![ECCV](https://img.shields.io/badge/ECCV-2026-9cf.svg)](https://eccv.ecva/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
 **A plug-and-play calibration framework for reconstruction-based Industrial Anomaly Detection under cold-start conditions.**
 
@@ -91,6 +89,10 @@ The JSON paths resolve against the **official download structure** of each datas
 <details>
 <summary><b>MVTec-AD</b></summary>
 
+🏠 Homepage: <https://www.mvtec.com/research-teaching/datasets/mvtec-ad>
+
+It contains over 5000 high-resolution images divided into fifteen different object and texture categories.
+
 ```
 <data_path>/bottle/
     train/good/*.png
@@ -103,6 +105,10 @@ The JSON paths resolve against the **official download structure** of each datas
 <details>
 <summary><b>VisA</b></summary>
 
+🏠 Homepage: <https://github.com/amazon-science/spot-diff>
+
+It contains 12 subsets corresponding to 12 different objects. There are 10,821 images with 9,621 normal and 1,200 anomalous samples.
+
 ```
 <data_path>/candle/
     Data/Images/Normal/*.JPG
@@ -114,6 +120,10 @@ The JSON paths resolve against the **official download structure** of each datas
 <details>
 <summary><b>Real-IAD</b></summary>
 
+🏠 Homepage: <https://realiad4ad.github.io/Real-IAD/>
+
+A new large-scale challenging industrial AD dataset, containing 30 classes with totally 151,050 images; 2,000∼5,000 resolution; 0.01%∼6.75% defect proportions; 1:1∼1:10 defect ratio.
+
 ```
 <data_path>/realiad_1024/<category>/<image>      # image_path from realiad_jsons/sup/<cat>.json
 <data_path>/realiad_jsons/sup/<category>.json    # authoritative labeled/test split
@@ -122,6 +132,10 @@ The JSON paths resolve against the **official download structure** of each datas
 
 <details>
 <summary><b>MANTA</b></summary>
+
+🏠 Homepage: <https://grainnet.github.io/MANTA.html>
+
+It contains 38 categories and over 130K object-level images.
 
 ```
 <data_path>/MANTA_TINY_256_cropped/<category>/<image>
